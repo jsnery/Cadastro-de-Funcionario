@@ -39,7 +39,7 @@ Criação da empresa
 Deve seguir a estrutura abaixo:
 empresa = Heart.Empresa("Nome da empresa", CNPJ, link_fb='ID do link do banco de dados do firebase (exemplo-48483-default-rtdb)', cargos=lista_de_cargos) 
 '''
-empresa = Heart.Empresa("Projeto Python", 123456789, link_fb='exemplo-48483-default-rtdb', cargos=cargos)
+empresa = Heart.Empresa(nome="Projeto Python", link_fb='exemplo-48483-default-rtdb', cargos=cargos)
 
 
 from app.controllers import default  # Importa o arquivo default.py que contém as rotas da aplicação

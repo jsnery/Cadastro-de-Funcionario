@@ -32,7 +32,7 @@ class Empresa: # Classe para criar uma empresa
        verifica se já existe um banco de dados 
        no firebase, caso não exista, cria um 
        novo banco de dados com o nome da empresa'''
-    def __init__(self, nome: str, cnpj: int, link_fb: str = "", cargos: list = []):
+    def __init__(self, nome: str, cnpj: int = 123456789, link_fb: str = "", cargos: list = []):
         self.nome = nome
         self.cnpj = cnpj
         self.cargos = cargos  # Lista de cargos da empresa
