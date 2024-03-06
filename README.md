@@ -7,7 +7,7 @@ Sistema feito em **Python** e **Html** utilizando o framework flask. Construido 
 ## Como utilizar?
 
 
-Crie sua lista de cargos **(Pre definido em 5, devendo ser editado em ```app/templates/definir_cargos.html```)**
+Crie sua lista de cargos **(Pré definido em 5, devendo ser editado em ```app/templates/definir_cargos.html```)**
 
 ```python
   cargos = [ 
@@ -22,7 +22,7 @@ Abra o ```__init__.py``` dentro da pasta app e subistitua o **Nome** e o **ID** 
 ```python
   empresa = Heart.Empresa(nome="Nome da Empresa", link_fb='ID do Firebase', cargos=cargos)
 ```
-No **Firebase** monte uma sequencia da seguinte forma:
+No **Firebase** monte uma sequência da seguinte forma:
 
 ![Como configurar](./scr/firebase_exemple.png)
 
