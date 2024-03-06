@@ -46,6 +46,7 @@
     <!-- Exibindo os funcionários -->
     <div class="row">
         {% for funcionario in funcionarios %}
+        {% if funcionario['Nome'] is not none and funcionario['Nome'] is string %}
         <div class="col s12 m2">
             <div class="card">
                 <div class="card-image">
@@ -70,10 +71,12 @@
                         {% else %}
                             N/A
                         {% endif %}
+                    
                     </p>
                 </div>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
     <!-- Rodapé -->
