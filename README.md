@@ -22,7 +22,7 @@ Abra o *\_\_init__.py* dentro da pasta app e subistitua o **Nome** e o **ID** do
 ```python
   empresa = Heart.Empresa(nome="Nome da Empresa", link_fb='exemplo-48483-default-rtdb', cargos=cargos)
 ```
-No **Firebase monte** uma sequencia da seguinte forma:
+No **Firebase** monte uma sequencia da seguinte forma:
 ![Como configurar](./scr/firebase_exemple.png)
 
 Agora é só executar o **run.py**.
