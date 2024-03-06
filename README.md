@@ -20,7 +20,7 @@ Crie sua lista de cargos **(Pre definido em 5, devendo ser editado em ```app/tem
 ```
 Abra o ```__init__.py``` dentro da pasta app e subistitua o **Nome** e o **ID** do firebase.
 ```python
-  empresa = Heart.Empresa(nome="Nome da Empresa", link_fb='exemplo-48483-default-rtdb', cargos=cargos)
+  empresa = Heart.Empresa(nome="Nome da Empresa", link_fb='ID do Firebase', cargos=cargos)
 ```
 No **Firebase** monte uma sequencia da seguinte forma:
 
