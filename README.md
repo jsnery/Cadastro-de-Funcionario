@@ -30,7 +30,7 @@ No **Firebase** monte uma sequência da seguinte forma:
 
 ![Como configurar](./scr/firebase_exemple.png)
 
-Agora é só executar o ```run.py```.
+Agora é só executar o **```run.py```**.
 
 ## Stack utilizada
 
