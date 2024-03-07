@@ -12,7 +12,14 @@ class Funcionarios:
     Salario: float = field(default=None, repr=False)
 
     def _dados_funcionario(self) -> dict:
-        return self.__dict__
+        return {
+            "Nome": self.Nome,
+            "Nascimento": self.Nascimento,
+            "CPF": self.CPF,
+            "Admissao": self.Admissao,
+            "Cargo": self.Cargo,
+            "Salario": self.Salario
+        }
 
 @dataclass        
 class Cargos:  # Classe para criar cargos
