@@ -1,42 +1,34 @@
+from dataclasses import dataclass, field
 import requests, json
 
 
-class Funcionarios:  # Classe para criar funcionários
+@dataclass
+class Funcionarios:
+    Nome: str = field(kw_only=True)
+    Nascimento: str = field(kw_only=True)
+    CPF: str = field(kw_only=True)
+    Admissao: str = field(kw_only=True)
+    Cargo: str = field(default=None, repr=False)
+    Salario: float = field(default=None, repr=False)
 
-    '''Cria um funcionário com um nome, data de nascimento, CPF e data de contratação'''
-    def __init__(self, nome: str, nascimento: str, cpf: str, data_de_contratacao: str):
-        self.nome = nome
-        self.nascimento = nascimento
-        self.cpf = cpf
-        self.data_de_contratacao = data_de_contratacao
-        self.cargo = None
-        self.salario = None
-
-    def __str__(self):
-        return f"Nome: {self.nome}\nCargo: {self.cargo}\nContratado: {self.data_de_contratacao}"
-    
-    '''Retorna um dicionário com os dados do funcionário para ser adicionado ao banco de dados do firebase'''
     def _dados_funcionario(self) -> dict:
-        return {
-            "Nome": self.nome,
-            "Nascimento": self.nascimento,
-            "CPF": self.cpf,
-            "Admissao": self.data_de_contratacao,
-            "Cargo": self.cargo,
-            "Salario": self.salario
-            }   
-    
-class Empresa: # Classe para criar uma empresa
+        return self.__dict__
 
-    '''Cria uma empresa com um nome e CNPJ e 
-       verifica se já existe um banco de dados 
-       no firebase, caso não exista, cria um 
-       novo banco de dados com o nome da empresa'''
-    def __init__(self, nome: str, cnpj: int = 123456789, link_fb: str = "", cargos: list = []):
-        self.nome = nome
-        self.cnpj = cnpj
-        self.cargos = cargos  # Lista de cargos da empresa
-        self.__link_fb = f"https://{link_fb}.firebaseio.com/Funcionarios/.json"  # Link do banco de dados do firebase
+@dataclass        
+class Cargos:  # Classe para criar cargos
+    nome: str
+    salario: int
+
+@dataclass
+class Empresa: # Classe para criar uma empresa
+    nome: str = field(kw_only=True)
+    cnpj: int = 1
+    link_fb: str = field(default='', repr=False, kw_only=True)
+    cargos: list = field(default_factory=list, repr=False, kw_only=True)
+    funcionarios: dict = field(default_factory=dict, repr=False, init=False)
+
+    def __post_init__(self):
+        self.__link_fb = f"https://{self.link_fb}.firebaseio.com/Funcionarios/.json"
         self.funcionarios = requests.get(self.__link_fb).json()
 
     '''Valida o CPF do funcionário'''
@@ -44,7 +36,7 @@ class Empresa: # Classe para criar uma empresa
     def __validar_cpf(funcionario):
         # Remover caracteres não numéricos
         try:
-            cpf = ''.join(c for c in f'{funcionario.cpf}' if c.isdigit())
+            cpf = ''.join(c for c in f'{funcionario.CPF}' if c.isdigit())
         except:
             cpf = ''.join(c for c in f'{funcionario}' if c.isdigit())
 
@@ -88,7 +80,7 @@ class Empresa: # Classe para criar uma empresa
     def contratar_funcionario(self, funcionario):
         if not self.__validar_cpf(funcionario):
             raise ValueError("CPF inválido")
-        cpf_sem_pontuacao = self.remover_ponturacao_do_cpf(funcionario.cpf)
+        cpf_sem_pontuacao = self.remover_ponturacao_do_cpf(funcionario.CPF)
         self.funcionarios.update({cpf_sem_pontuacao: funcionario._dados_funcionario()})   
         self.__atualizar_db()    
 
@@ -103,13 +95,13 @@ class Empresa: # Classe para criar uma empresa
         self.__atualizar_db()
 
     '''Define o cargo e salário de um funcionário e atualiza o banco de dados do firebase'''
-    def definir_cargo_funcionario(self, funcionario, cargo):
+    def definir_cargo_funcionario(self, cpf: int|str, cargo):
         cargo = int(cargo)
         if cargo > len(self.cargos) or cargo < 0:
             raise ValueError("Cargo inválido")
-        if not self.__validar_cpf(funcionario):
+        if not self.__validar_cpf(cpf):
             raise ValueError("CPF inválido")
-        cpf_sem_pontuacao = self.remover_ponturacao_do_cpf(funcionario)
+        cpf_sem_pontuacao = self.remover_ponturacao_do_cpf(cpf)
         if cpf_sem_pontuacao not in self.funcionarios:
             raise ValueError("Funcionário não encontrado")
         self.funcionarios[cpf_sem_pontuacao].update({
@@ -131,33 +123,49 @@ class Empresa: # Classe para criar uma empresa
     def listar_funcionarios(self):
         for cpf in self.funcionarios:
             yield  self.funcionarios[cpf]
-        # return self.funcionarios
-            
-class Cargos:  # Classe para criar cargos
-    def __init__(self, nome, salario):
-        self.nome = nome
-        self.salario = salario
-
-    def __str__(self):
-        return f"Cargo: {self.nome}\nSalario: {self.salario}"
 
 
 # if __name__ == "__main__":  # Teste das classes
 
-#     cargos = [Cargos("Caixa", 1500), Cargos("Gerente", 5000), Cargos("Faxineiro", 1000), Cargos("Vendedor", 2000), Cargos("Diretor", 10000)]
-#     empresa = Empresa("Wallmart", 123456789, link_fb='exemplo-48483-default-rtdb', cargos=cargos)
+#     lista_cargos = [ # Lista de cargos
+#         Cargos("Caixa", 1500),      # 0
+#         Cargos("Gerente", 5000),    # 1
+#         Cargos("Faxineiro", 1000),  # 2
+#         Cargos("Vendedor", 2000),   # 3
+#         Cargos("Diretor", 10000)    # 4
+#     ]
+
+#     empresa = Empresa( # Empresa Wallmart
+#         nome = "Wallmart", 
+#         link_fb = 'projetopython-95948-default-rtdb',
+#         cargos = lista_cargos
+#     )
    
+#     john = Funcionarios( # Funcionário John
+#         Nome = "John Doe",
+#         Nascimento = "14/02/2001",
+#         CPF = '974.016.460-99', # CPF gerado aleatoriamente
+#         Admissao = '04/03/2024'
+#     )
 
-#     Jane = Funcionarios("John Doe", "14/02/2001", '974.016.460-99', '04/03/2024')
-#     John = Funcionarios("Jane Doe", "28/12/1999", '958.392.500-40', '04/03/2024')
+#     jane = Funcionarios(  # Funcionária Jane
+#         Nome = "Jane Doe",
+#         Nascimento = "28/12/1999",
+#         CPF = '958.392.500-40', # CPF gerado aleatoriamente
+#         Admissao ='04/03/2024'
+#     )
 
-    
-#     empresa.contratar_funcionario(sara)
-#     empresa.contratar_funcionario(matheus)
-#     # empresa.definir_cargo_funcionario(Jane, 1)
-#     # empresa.definir_cargo_funcionario(John, 0)
+#     empresa.contratar_funcionario(jane) # Contrata a funcionária Jane
+#     empresa.contratar_funcionario(john) # Contrata o funcionário John
+
+#     empresa.definir_cargo_funcionario('958.392.500-40', 1) # Gerente
+#     empresa.definir_cargo_funcionario('974.016.460-99', 0) # Caixa
+
 #     # empresa.demitir_funcionario('958.392.500-40')
 #     # print(empresa.buscar_funcionario('974.016.460-99'))
 
 #     for i in empresa.listar_funcionarios():
-#         print(i['Nome'].split()[0])
+#         try:
+#             print(f'Nome:{i['Nome']}, Cargo:{i['Cargo']}')
+#         except:
+#             pass
