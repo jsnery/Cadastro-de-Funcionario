@@ -1,0 +1,36 @@
+body {
+    /* Substitua 'url_da_imagem' pela URL da imagem que você deseja usar */
+    background-image: url('../img/bg.webp');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    color: #000; /* Cor do texto */
+}
+#card_2 {
+    padding: 20px; /* Espaçamento interno do card */
+}
+/* Adicione o seguinte código */
+#card-title2 {
+    color: #ffffff !important; /* Cor do texto */
+    
+}
+select option:disabled {
+    color: #808080 !important; /* Cor cinza */
+}
+.btn {
+    color: #fff !important; /* Cor do texto do botão */
+}
+.nav-wrapper {
+    background-color: #fff; /* Cor de fundo da barra de navegação */
+}
+.nav-wrapper a,
+.nav-wrapper li a {
+    color: #000; /* Cor do texto da barra de navegação */
+}
+.card-content {
+    font-size: 1.2em; /* Aumenta o tamanho da fonte */
+}
+a.disabled {
+    pointer-events: none;
+    color: rgb(247, 101, 44) !important;
+}

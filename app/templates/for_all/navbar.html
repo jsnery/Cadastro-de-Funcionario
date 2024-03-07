@@ -1,0 +1,13 @@
+<nav class="nav-wrapper">
+    <div class="container">
+        <a href="/" class="brand-logo {{ 'disabled' if request.path == '/' else '' }}"><b>{{nome}}</b></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/todos" class="{{ 'disabled' if request.path == '/todos' else '' }}">{% if request.path == '/todos' %}<b>{% endif %}Todos os Cadastros{% if request.path == '/todos' %}</b>{% endif %}</a></li>
+            <li><a href="/cadastro" class="{{ 'disabled' if request.path == '/cadastro' else '' }}">{% if request.path == '/cadastro' %}<b>{% endif %}Cadastrar Funcionário{% if request.path == '/cadastro' %}</b>{% endif %}</a></li>
+            <li><a href="/buscar" class="{{ 'disabled' if request.path == '/buscar' else '' }}">{% if request.path == '/buscar' %}<b>{% endif %}Buscar Funcionário{% if request.path == '/buscar' %}</b>{% endif %}</a></li>
+            <li><a href="/definir_cargo" class="{{ 'disabled' if request.path == '/definir_cargo' else '' }}">{% if request.path == '/definir_cargo' %}<b>{% endif %}Definir Cargo{% if request.path == '/definir_cargo' %}</b>{% endif %}</a></li>
+            <li><a href="/demitir" class="{{ 'disabled' if request.path == '/demitir' else '' }}">{% if request.path == '/demitir' %}<b>{% endif %}Demitir{% if request.path == '/demitir' %}</b>{% endif %}</a></li>
+        </ul>
+    </div>
+</nav>
+
