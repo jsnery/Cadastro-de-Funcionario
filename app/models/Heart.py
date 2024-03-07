@@ -11,6 +11,7 @@ class Funcionarios:
     Cargo: str = field(default=None, repr=False)
     Salario: float = field(default=None, repr=False)
 
+    @property
     def _dados_funcionario(self) -> dict:
         return {
             "Nome": self.Nome,
@@ -76,6 +77,7 @@ class Empresa: # Classe para criar uma empresa
         return ''.join(c for c in f'{cpf}' if c.isdigit())
        
     '''Atualiza o banco de dados do firebase com os dados dos funcionários'''
+    @property
     def __atualizar_db(self):
         try:
             requests.put(self.__link_fb, data=json.dumps(self.funcionarios))
@@ -83,13 +85,19 @@ class Empresa: # Classe para criar uma empresa
             print(f"Erro ao atualizar o banco de dados: {e}")
             raise ValueError("Banco de dados não encontrado")
 
+    '''Lista todos os funcionários da empresa e retorna um dicionário com os dados dos funcionários'''
+    @property
+    def listar_funcionarios(self):
+        for cpf in self.funcionarios:
+            yield  self.funcionarios[cpf]
+
     '''Contrata um funcionário e adiciona ao banco de dados do firebase'''            
     def contratar_funcionario(self, funcionario):
         if not self.__validar_cpf(funcionario):
             raise ValueError("CPF inválido")
         cpf_sem_pontuacao = self.remover_ponturacao_do_cpf(funcionario.CPF)
-        self.funcionarios.update({cpf_sem_pontuacao: funcionario._dados_funcionario()})   
-        self.__atualizar_db()    
+        self.funcionarios.update({cpf_sem_pontuacao: funcionario._dados_funcionario})   
+        self.__atualizar_db  
 
     '''Demitir um funcionário e atualiza o banco de dados do firebase'''
     def demitir_funcionario(self, cpf):
@@ -99,7 +107,7 @@ class Empresa: # Classe para criar uma empresa
         if cpf_sem_pontuacao not in self.funcionarios:
             raise ValueError("Funcionário não encontrado")
         self.funcionarios.pop(cpf_sem_pontuacao, None)
-        self.__atualizar_db()
+        self.__atualizar_db
 
     '''Define o cargo e salário de um funcionário e atualiza o banco de dados do firebase'''
     def definir_cargo_funcionario(self, cpf: int|str, cargo):
@@ -115,7 +123,7 @@ class Empresa: # Classe para criar uma empresa
             "Cargo": self.cargos[cargo].nome,
             "Salario": self.cargos[cargo].salario
         })
-        self.__atualizar_db()
+        self.__atualizar_db
 
     '''Busca um funcionário pelo CPF e retorna um objeto Funcionarios'''
     def buscar_funcionario(self, cpf):
@@ -125,54 +133,3 @@ class Empresa: # Classe para criar uma empresa
         if cpf_sem_pontuacao not in self.funcionarios:
             raise ValueError("Funcionário não encontrado")
         return self.funcionarios[cpf_sem_pontuacao]
-
-    '''Lista todos os funcionários da empresa e retorna um dicionário com os dados dos funcionários'''
-    def listar_funcionarios(self):
-        for cpf in self.funcionarios:
-            yield  self.funcionarios[cpf]
-
-
-# if __name__ == "__main__":  # Teste das classes
-
-#     lista_cargos = [ # Lista de cargos
-#         Cargos("Caixa", 1500),      # 0
-#         Cargos("Gerente", 5000),    # 1
-#         Cargos("Faxineiro", 1000),  # 2
-#         Cargos("Vendedor", 2000),   # 3
-#         Cargos("Diretor", 10000)    # 4
-#     ]
-
-#     empresa = Empresa( # Empresa Wallmart
-#         nome = "Wallmart", 
-#         link_fb = 'projetopython-95948-default-rtdb',
-#         cargos = lista_cargos
-#     )
-   
-#     john = Funcionarios( # Funcionário John
-#         Nome = "John Doe",
-#         Nascimento = "14/02/2001",
-#         CPF = '974.016.460-99', # CPF gerado aleatoriamente
-#         Admissao = '04/03/2024'
-#     )
-
-#     jane = Funcionarios(  # Funcionária Jane
-#         Nome = "Jane Doe",
-#         Nascimento = "28/12/1999",
-#         CPF = '958.392.500-40', # CPF gerado aleatoriamente
-#         Admissao ='04/03/2024'
-#     )
-
-#     empresa.contratar_funcionario(jane) # Contrata a funcionária Jane
-#     empresa.contratar_funcionario(john) # Contrata o funcionário John
-
-#     empresa.definir_cargo_funcionario('958.392.500-40', 1) # Gerente
-#     empresa.definir_cargo_funcionario('974.016.460-99', 0) # Caixa
-
-#     # empresa.demitir_funcionario('958.392.500-40')
-#     # print(empresa.buscar_funcionario('974.016.460-99'))
-
-#     for i in empresa.listar_funcionarios():
-#         try:
-#             print(f'Nome:{i['Nome']}, Cargo:{i['Cargo']}')
-#         except:
-#             pass

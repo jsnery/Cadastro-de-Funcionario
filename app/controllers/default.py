@@ -3,13 +3,13 @@ from app import app, render_template, empresa, request, criar_funcionario, defin
 
 @app.route('/')
 def home():  # Rota para a página inicial
-    funcionarios = [funcionario for funcionario in empresa.listar_funcionarios()]
+    funcionarios = [funcionario for funcionario in empresa.listar_funcionarios]
     todos_funcionarios =  jsonify(funcionarios)
     return render_template('index.html', nome=empresa.nome, funcionarios=todos_funcionarios.json)
 
 @app.route('/todos')
 def todos():  # Rota para a página com todos os funcionários
-    funcionarios = [funcionario for funcionario in empresa.listar_funcionarios()]
+    funcionarios = [funcionario for funcionario in empresa.listar_funcionarios]
     todos_funcionarios =  jsonify(funcionarios)
     return render_template('todos.html', nome=empresa.nome, funcionarios=todos_funcionarios.json)
 

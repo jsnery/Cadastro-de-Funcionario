@@ -23,7 +23,10 @@ Criação de cargos
 
 As opções de cargos devem ser criadas antes da empresa ser criada
 Deve seguir a estrutura abaixo:
-lista_de_cargos = [Heart.Cargos("Nome do cargo", Salário),] 
+
+lista_de_cargos = [
+    Heart.Cargos("Nome do cargo", Salário)
+] 
 '''
 lista_cargos = [ 
     Heart.Cargos("Caixa", 1500),        # 0
@@ -37,7 +40,12 @@ lista_cargos = [
 Criação da empresa
 
 Deve seguir a estrutura abaixo:
-empresa = Heart.Empresa(nome="Nome da empresa", link_fb='exemplo-48483-default-rtdb', cargos=lista_de_cargos) 
+
+empresa = Heart.Empresa(
+    nome="Nome da empresa",
+    link_fb='exemplo-48483-default-rtdb',
+    cargos=lista_de_cargos
+)
 '''
 empresa = Heart.Empresa(
     nome="Projeto Python",
