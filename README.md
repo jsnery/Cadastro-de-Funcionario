@@ -18,7 +18,7 @@ Crie sua lista de cargos **(Pré definido em 5, devendo ser editado em ```app/te
     Heart.Cargos("Diretor", 10000)
 ]
 ```
-Abra o ```app/__init__.py``` e subistitua o **Nome** e o **ID** do firebase.
+Abra o **```app/__init__.py```** e subistitua o **Nome** e o **ID** do firebase.
 ```python
   empresa = Heart.Empresa(
     nome="Nome da Empresa",
