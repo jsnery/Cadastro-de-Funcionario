@@ -1,17 +1,28 @@
-from app import app, render_template, empresa, request, criar_funcionario, definir_cargo_funcionario, jsonify 
+from app import app, empresa, criar_funcionario, definir_cargo_funcionario
+from flask import jsonify, request, render_template
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():  # Rota para a página inicial
     funcionarios = [funcionario for funcionario in empresa.listar_funcionarios]
-    todos_funcionarios =  jsonify(funcionarios)
-    return render_template('index.html', nome=empresa.nome, funcionarios=todos_funcionarios.json)
+    todos_funcionarios = jsonify(funcionarios)
+    return render_template(
+        'index.html',
+        nome=empresa.nome,
+        funcionarios=todos_funcionarios.json
+    )
 
-@app.route('/todos')
+
+@app.route('/todos', methods=['GET', 'POST'])
 def todos():  # Rota para a página com todos os funcionários
     funcionarios = [funcionario for funcionario in empresa.listar_funcionarios]
-    todos_funcionarios =  jsonify(funcionarios)
-    return render_template('todos.html', nome=empresa.nome, funcionarios=todos_funcionarios.json)
+    todos_funcionarios = jsonify(funcionarios)
+    return render_template(
+        'todos.html',
+        nome=empresa.nome,
+        funcionarios=todos_funcionarios.json
+    )
+
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():  # Rota para a página de cadastro de funcionários
@@ -27,7 +38,13 @@ def cadastro():  # Rota para a página de cadastro de funcionários
             mensagemP = "Funcionário cadastrado com sucesso."
         else:
             mensagemN = "Falha ao cadastrar funcionário."
-    return render_template('cadastrar.html', mensagemP=mensagemP, mensagemN=mensagemN, nome=empresa.nome)
+    return render_template(
+        'cadastrar.html',
+        mensagemP=mensagemP,
+        mensagemN=mensagemN,
+        nome=empresa.nome
+    )
+
 
 @app.route('/buscar', methods=['GET', 'POST'])
 def buscar():  # Rota para a página de busca de funcionários
@@ -39,7 +56,13 @@ def buscar():  # Rota para a página de busca de funcionários
             funcionario = empresa.buscar_funcionario(cpf)
         except ValueError as e:
             errou = str(e)
-    return render_template('buscar.html', funcionario=funcionario, errou=errou, nome=empresa.nome)
+    return render_template(
+        'buscar.html',
+        funcionario=funcionario,
+        errou=errou,
+        nome=empresa.nome
+    )
+
 
 @app.route('/demitir', methods=['GET', 'POST'])
 def demitir_funcionario():  # Rota para a página de demissão de funcionários
@@ -53,7 +76,13 @@ def demitir_funcionario():  # Rota para a página de demissão de funcionários
         except ValueError as e:
             mensagemN = str(e)
         # return "Funcionário demitido"
-    return render_template('demitir.html', mensagemP=mensagemP, mensagemN=mensagemN, nome=empresa.nome)
+    return render_template(
+        'demitir.html',
+        mensagemP=mensagemP,
+        mensagemN=mensagemN,
+        nome=empresa
+    )
+
 
 @app.route('/definir_cargo', methods=['GET', 'POST'])
 def definir_cargo():  # Rota para a página de definição de cargo
@@ -67,4 +96,9 @@ def definir_cargo():  # Rota para a página de definição de cargo
             mensagemP = "Cargo definido com sucesso."
         except ValueError as e:
             mensagemN = str(e)
-    return render_template('definir_cargo.html', mensagemP=mensagemP, mensagemN=mensagemN, nome=empresa.nome)
+    return render_template(
+        'definir_cargo.html',
+        mensagemP=mensagemP,
+        mensagemN=mensagemN,
+        nome=empresa.nome
+    )
