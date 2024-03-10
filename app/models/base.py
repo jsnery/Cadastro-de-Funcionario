@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-import requests, json
+import requests  # type: ignore
+import json
 
 
 @dataclass
@@ -8,8 +9,8 @@ class Funcionarios:
     Nascimento: str = field(kw_only=True)
     CPF: str = field(kw_only=True)
     Admissao: str = field(kw_only=True)
-    Cargo: str = field(default=None, repr=False)
-    Salario: float = field(default=None, repr=False)
+    Cargo: str = field(default='', repr=False)
+    Salario: float = field(default=0.0, repr=False)
 
     @property
     def _dados_funcionario(self) -> dict:
@@ -22,13 +23,15 @@ class Funcionarios:
             "Salario": self.Salario
         }
 
-@dataclass        
+
+@dataclass
 class Cargos:  # Classe para criar cargos
     nome: str
     salario: int
 
+
 @dataclass
-class Empresa: # Classe para criar uma empresa
+class Empresa:  # Classe para criar uma empresa
     nome: str = field(kw_only=True)
     cnpj: int = 1
     link_fb: str = field(default='', repr=False, kw_only=True)
@@ -45,7 +48,7 @@ class Empresa: # Classe para criar uma empresa
         # Remover caracteres não numéricos
         try:
             cpf = ''.join(c for c in f'{funcionario.CPF}' if c.isdigit())
-        except:
+        except AttributeError:
             cpf = ''.join(c for c in f'{funcionario}' if c.isdigit())
 
         # Verificar se o CPF tem 11 dígitos
@@ -75,7 +78,7 @@ class Empresa: # Classe para criar uma empresa
     @staticmethod
     def remover_ponturacao_do_cpf(cpf):
         return ''.join(c for c in f'{cpf}' if c.isdigit())
-       
+
     '''Atualiza o banco de dados do firebase com os dados dos funcionários'''
     @property
     def __atualizar_db(self):
@@ -85,19 +88,23 @@ class Empresa: # Classe para criar uma empresa
             print(f"Erro ao atualizar o banco de dados: {e}")
             raise ValueError("Banco de dados não encontrado")
 
-    '''Lista todos os funcionários da empresa e retorna um dicionário com os dados dos funcionários'''
+    '''Lista todos os funcionários da empresa
+    e retorna um dicionário com os dados dos
+    funcionários'''
     @property
     def listar_funcionarios(self):
         for cpf in self.funcionarios:
-            yield  self.funcionarios[cpf]
+            yield self.funcionarios[cpf]
 
-    '''Contrata um funcionário e adiciona ao banco de dados do firebase'''            
+    '''Contrata um funcionário e adiciona aobanco de dados do firebase'''
     def contratar_funcionario(self, funcionario):
         if not self.__validar_cpf(funcionario):
             raise ValueError("CPF inválido")
         cpf_sem_pontuacao = self.remover_ponturacao_do_cpf(funcionario.CPF)
-        self.funcionarios.update({cpf_sem_pontuacao: funcionario._dados_funcionario})   
-        self.__atualizar_db  
+        self.funcionarios.update(
+            {cpf_sem_pontuacao: funcionario._dados_funcionario}
+        )
+        self.__atualizar_db
 
     '''Demitir um funcionário e atualiza o banco de dados do firebase'''
     def demitir_funcionario(self, cpf):
@@ -109,8 +116,8 @@ class Empresa: # Classe para criar uma empresa
         self.funcionarios.pop(cpf_sem_pontuacao, None)
         self.__atualizar_db
 
-    '''Define o cargo e salário de um funcionário e atualiza o banco de dados do firebase'''
-    def definir_cargo_funcionario(self, cpf: int|str, cargo):
+    '''Define o cargo e salário e atualiza o banco de dados do firebase'''
+    def definir_cargo_funcionario(self, cpf, cargo):
         cargo = int(cargo)
         if cargo > len(self.cargos) or cargo < 0:
             raise ValueError("Cargo inválido")

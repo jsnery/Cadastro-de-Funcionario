@@ -1,10 +1,10 @@
 from flask import Flask
-import app.models.Heart as Heart
+import app.models.base as base
 
 
 # Função para criar um funcionário usado em app/controllers/default.py
 def criar_funcionario(nome, cpf, nascimento, admissao):
-    funcionario = Heart.Funcionarios(
+    funcionario = base.Funcionarios(
         Nome=nome,
         Nascimento=nascimento,
         CPF=cpf,
@@ -39,11 +39,11 @@ lista_de_cargos = [
 ]
 '''
 lista_cargos = [
-    Heart.Cargos("Caixa", 1500),        # 0
-    Heart.Cargos("Gerente", 5000),      # 1
-    Heart.Cargos("Faxineiro", 1000),    # 2
-    Heart.Cargos("Vendedor", 2000),     # 3
-    Heart.Cargos("Diretor", 10000)      # 4
+    base.Cargos("Caixa", 1500),        # 0
+    base.Cargos("Gerente", 5000),      # 1
+    base.Cargos("Faxineiro", 1000),    # 2
+    base.Cargos("Vendedor", 2000),     # 3
+    base.Cargos("Diretor", 10000)      # 4
 ]
 
 '''Criação da empresa
@@ -56,7 +56,7 @@ empresa = Heart.Empresa(
     cargos=lista_de_cargos
 )
 '''
-empresa = Heart.Empresa(
+empresa = base.Empresa(
     nome="Projeto Python",
     link_fb='exemplo-48483-default-rtdb',
     cargos=lista_cargos
